@@ -9,14 +9,6 @@ You can find additional info about some of the code on my blog:
 
 ## Local Development
 
-### Connect to Postgres
-
-This project also manages Postgres databases. Before being able to apply changes, connect to Postgres by running:
-
-```shell
-kubectl port-forward service/postgres-svc --namespace postgres 5432:5432
-```
-
 ### Authentication
 
 [Use the Azure CLI to authenticate to Azure](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli) to interactively run Terraform:
@@ -69,7 +61,6 @@ terraform apply infrastructure-core.tfplan
 ## Replace the AKS cluster and re-create the Kubernetes resources
 
 ```shell
-terraform destroy -target module.postgres
 terraform destroy -target module.kubernetes
 terraform apply -target module.kubernetes.helm_release.cert_manager #CRDs
 terraform apply -target module.kubernetes
@@ -114,15 +105,6 @@ Kubernetes resources that are stacked on top of the AKS cluster defined in the `
 | [`postgres.tf`](./kubernetes/postgres.tf)             | [PostgreSQL](https://www.postgresql.org/)                                                                                                         |
 | [`remark42.tf`](./kubernetes/remark42.tf)             | [Remark42](https://remark42.com/)                                                                                                                 |
 | [`traefik-v2.tf`](./kubernetes/traefik-v2.tf)         | [Traefik Proxy](https://traefik.io/traefik/)                                                                                                      |
-
-### PostgreSQL
-
-PostgreSQL resources that are stacked on top of the PostgreSQL deployment defined in the `kubernetes` module.
-
-| File                                                | Description                      |
-| --------------------------------------------------- | -------------------------------- |
-| [`matrix-synapse.tf`](./postgres/matrix-synapse.tf) | Matrix Synapse database and user |
-| [`plausible.tf`](./postgres/plausible.tf)           | Plausible database and user      |
 
 ## Related Repositories
 

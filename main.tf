@@ -22,11 +22,6 @@ terraform {
       version = "~> 2.25"
     }
 
-    postgresql = {
-      source  = "cyrilgdn/postgresql"
-      version = "~> 1.21.0"
-    }
-
     random = {
       source  = "random"
       version = "~> 3.6"
@@ -64,14 +59,6 @@ provider "kubernetes" {
   client_certificate     = base64decode(module.core.aks_client_certificate)
   client_key             = base64decode(module.core.aks_client_key)
   cluster_ca_certificate = base64decode(module.core.aks_cluster_ca_certificate)
-}
-
-provider "postgresql" {
-  host     = "localhost" # kubectl port-forward TODO put into vars?
-  port     = 5432
-  username = var.postgres_username
-  password = random_password.postgres.result
-  sslmode  = "disable"
 }
 
 # Postgres passwords
@@ -148,16 +135,4 @@ module "kubernetes" {
   matrix_synapse_registration_shared_secret = var.matrix_synapse_registration_shared_secret
   matrix_synapse_macaroon_secret_key        = var.matrix_synapse_macaroon_secret_key
   matrix_synapse_form_secret                = var.matrix_synapse_form_secret
-}
-
-module "postgres" {
-  source = "./postgres"
-
-  matrix_synapse_db       = var.matrix_synapse_db
-  matrix_synapse_username = var.matrix_synapse_db_username
-  matrix_synapse_password = random_password.matrix_synapse_db.result
-
-  plausible_db       = var.plausible_db
-  plausible_username = var.plausible_db_username
-  plausible_password = random_password.plausible_db.result
 }
